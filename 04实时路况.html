@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图显示</title>
+    <!-- 引入资源 -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode:'fe48b99b2236fc7e747d9418b6661974',
+        }
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=597c5c3a47b28328c6d3e1d82a8446b4"></script> 
+    <!-- 设置地图样式 -->
+    <style>
+        #container{
+            width: 800px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="add()">添加路况</button>
+    <button onclick="remove()">删除路况</button>
+    <!-- 创建地图容器 -->
+    <div id="container"></div>
+    <!-- 记载地图 -->
+    <script>
+        // 定义一个变量，保存一个对象
+        var map = new AMap.Map('container',{
+            center:[114,30],//设置地图中心点的经纬度
+            zoom:12,  //地图的缩放比例（3-20）
+            viewMode:'3D',  //放大后有3D效果
+            pitch:45   //3D俯视角度
+        })
+
+        // 实现图层的实时路况
+        var traffic = new AMap.TileLayer.Traffic({
+            'autoRefresh': true,     //是否自动刷新，默认为false
+            'interval': 180,         //刷新间隔，默认180s
+        });
+
+        function add (){
+            map.add(traffic); //通过add方法添加图层
+        }
+        function remove (){
+            map.remove(traffic); //通过add方法添加图层
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图显示</title>
+    <!-- 引入资源 -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode:'fe48b99b2236fc7e747d9418b6661974',
+        }
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=597c5c3a47b28328c6d3e1d82a8446b4"></script> 
+    <!-- 设置地图样式 -->
+    <style>
+        #container{
+            width: 800px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 创建地图容器 -->
+    <div id="container"></div>
+    <!-- 记载地图 -->
+    <script>
+        // 定义一个变量，保存一个对象
+        var map = new AMap.Map('container',{
+            center:[114,30],//设置地图中心点的经纬度
+            zoom:12,  //地图的缩放比例（3-20）
+            viewMode:'2D',  //放大后有2D效果
+        })
+
+        //1.创建两个点，设置可以拖拽
+        var m1 = new AMap.Marker({
+            map:map,//将m1这个点添加到地图
+            draggable:true,//设置可以拖拽
+            position:new AMap.LngLat(114,30)
+        })
+
+        var m2 = new AMap.Marker({
+            map:map,//将m2这个点添加到地图
+            draggable:true,//设置可以拖拽
+            position:new AMap.LngLat(114.23,30.212)
+        })
+        // 根据覆盖物做一个自适应
+        map.setFitView()
+        
+        // 2.准备一条线
+        var line = new AMap.Polyline({
+            strokeColor:"#80d8ff", //描边的颜色
+            isOutline:true, //包含轮廓
+            outerlineColor:"white"
+        })
+        line.setMap(map)
+
+        // 3.准备文本
+        var text = new AMap.Text({
+            text:'',
+            style:{
+                'background-color':'#29b6f6',
+                'border-color':'#e1f5fe',
+                'font-size':'16px'
+            }
+        })
+        text.setMap(map)
+
+        // 4.计算
+        function compute(){
+            // 得到m1和m2的经纬度
+            var p1 = m1.getPosition()
+            var p2 = m2.getPosition()
+            // 希望text文本显示在两个经纬度的中间
+            var textPos = p1.divideBy(2).add(p2.divideBy(2)) //(p1+p2)/2
+
+            var distance = Math.round(p1.distance(p2))
+            var path = [p1,p2] 
+            line.setPath(path)  //绘制线，根据p1,p2起始点和终点的坐标
+            text.setText("距离为"+distance+"米")
+            text.setPosition(textPos)
+        } 
+
+        compute()
+        m1.on('dragging',compute)
+        m2.on('dragging',compute)
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图显示</title>
+    <!-- 引入资源 -->
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode:'fe48b99b2236fc7e747d9418b6661974',
+        }
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=597c5c3a47b28328c6d3e1d82a8446b4"></script> 
+    <!-- 设置地图样式 -->
+    <style>
+        #container{
+            width: 800px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 创建地图容器 -->
+    <div id="container"></div>
+    <!-- 记载地图 -->
+    <script>
+        // 定义一个变量，保存一个对象
+        var map = new AMap.Map('container',{
+            center:[114,30],//设置地图中心点的经纬度
+            zoom:12,  //地图的缩放比例（3-20）
+            viewMode:'3D',  //放大后有3D效果
+            pitch:45   //3D俯视角度
+        })
+
+     //  加载控件
+    //  5.1安装plugin
+    AMap.plugin([
+            'AMap.ToolBar',
+            'AMap.Scale',
+            'AMap.HawkEye',
+            'AMap.MapType',
+            'AMap.Geolocation',
+            'AMap.ControlBar'
+        ], function(){
+                // 在图面添加工具条控件，工具条控件集成了缩放、平移、定位等功能按钮在内的组合控件
+                map.addControl(new AMap.ToolBar());
+
+                // 在图面添加比例尺控件，展示地图在当前层级和纬度下的比例尺
+                map.addControl(new AMap.Scale());
+
+                // 在图面添加鹰眼控件，在地图右下角显示地图的缩略图
+                map.addControl(new AMap.HawkEye({isOpen:true}));
+            
+                // 在图面添加类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+                map.addControl(new AMap.MapType());
+            
+                // 在图面添加定位控件，用来获取和展示用户主机所在的经纬度位置
+                map.addControl(new AMap.Geolocation());
+
+                // 罗盘角度控件
+                map.addControl(new AMap.ControlBar());
+        });
+    </script>
+</body>
+</html>
